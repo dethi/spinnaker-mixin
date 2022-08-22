@@ -127,13 +127,13 @@ grafana.row.new(
   })
   .addTarget(
     grafana.prometheus.target(
-      'avg(\n  sum without (interface) (\n    rate(container_network_receive_bytes_total{pod=~"$spinSvc.*"}[$__rate_interval])\n  )\n)',
+      'avg(\n  sum without (interface) (\n    rate(container_network_receive_bytes_total{namespace="spinnaker", pod=~"spin-$Component-.*"}[$__rate_interval])\n  )\n)',
       legendFormat='receive',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'avg(\n  sum without (interface) (\n    rate(container_network_transmit_bytes_total{pod=~"$spinSvc.*"}[$__rate_interval])\n  )\n)',
+      'avg(\n  sum without (interface) (\n    rate(container_network_transmit_bytes_total{namespace="spinnaker", pod=~"spin-$Component-.*"}[$__rate_interval])\n  )\n)',
       legendFormat='transmit',
     )
   )
