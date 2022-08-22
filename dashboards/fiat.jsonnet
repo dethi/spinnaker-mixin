@@ -31,9 +31,10 @@ grafana.dashboard.new(
 
 .addTemplate(
   grafana.template.datasource(
-    'datasource',
-    'prometheus',
-    '',
+    name='datasource',
+    label='Datasource',
+    query='prometheus',
+    current='cv-infra',
   )
 )
 .addTemplate(
