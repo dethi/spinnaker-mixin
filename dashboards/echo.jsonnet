@@ -8,6 +8,7 @@ grafana.dashboard.new(
   editable=true,
   refresh='1m',
   time_from='now-1h',
+  graphTooltip='shared_crosshair',
   tags=['spinnaker'],
   uid='spinnaker-echo',
 )
