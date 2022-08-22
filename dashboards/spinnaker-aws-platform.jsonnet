@@ -4,7 +4,7 @@ grafana.dashboard.new(
   'Spinnaker AWS Platform',
   editable=true,
   refresh='1m',
-  time_from='now-1h',
+  time_from='now-6h',
   graphTooltip='shared_crosshair',
   tags=['spinnaker'],
   uid='spinnaker-aws-platform',

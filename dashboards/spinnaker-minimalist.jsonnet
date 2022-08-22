@@ -4,7 +4,7 @@ grafana.dashboard.new(
   'Spinnaker Minimalist',
   editable=true,
   refresh='1m',
-  time_from='now-1h',
+  time_from='now-6h',
   graphTooltip='shared_crosshair',
   tags=['spinnaker'],
   uid='spinnaker-minimalist',
