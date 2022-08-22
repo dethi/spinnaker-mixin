@@ -24,7 +24,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Application',
     datasource='$datasource',
-    query='label_values(stage_invocations_total{spinSvc=".*orca.*"}, application)',
+    query='label_values(stage_invocations_total{app_kubernetes_io_name=".*orca.*"}, application)',
     allValues='.*',
     current='All',
     refresh=2,
@@ -44,7 +44,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(stage_invocations_total{spinSvc=~".*orca.*", application=~"$Application"}[$__rate_interval])) by (application, type)',
+        'sum(rate(stage_invocations_total{app_kubernetes_io_name=~".*orca.*", application=~"$Application"}[$__rate_interval])) by (application, type)',
         legendFormat='{{application}}/{{type}}',
       )
     )
@@ -58,7 +58,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(pipelines_triggered_total{spinSvc=~".*echo.*", application=~"$Application"}[$__rate_interval])) by (application)',
+        'sum(rate(pipelines_triggered_total{app_kubernetes_io_name=~".*echo.*", application=~"$Application"}[$__rate_interval])) by (application)',
         legendFormat='{{application}}',
       )
     )
@@ -72,14 +72,14 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(bakesActive{spinSvc=~".*rosco.*"})',
+        'sum(bakesActive{app_kubernetes_io_name=~".*rosco.*"})',
         legendFormat='Active',
       )
     )
 
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesRequested_total{spinSvc=~".*rosco.*"}[$__rate_interval])) by (flavor)',
+        'sum(rate(bakesRequested_total{app_kubernetes_io_name=~".*rosco.*"}[$__rate_interval])) by (flavor)',
         legendFormat='Request({{flavor}})',
       )
     )
@@ -94,7 +94,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesCompleted_seconds_count{spinSvc=~".*rosco.*",success="false"}[$__rate_interval])) by (cause, region)',
+        'sum(rate(bakesCompleted_seconds_count{app_kubernetes_io_name=~".*rosco.*",success="false"}[$__rate_interval])) by (cause, region)',
         legendFormat='{{cause}}/{{region}}',
       )
     )
@@ -107,7 +107,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesCompleted_seconds_count{spinSvc=~".*rosco.*",success="true"}[$__rate_interval])) by (region)',
+        'sum(rate(bakesCompleted_seconds_count{app_kubernetes_io_name=~".*rosco.*",success="true"}[$__rate_interval])) by (region)',
         legendFormat='{{region}}',
       )
     )
@@ -121,8 +121,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(resilience4j_circuitbreaker_state{state=~".*open"}) by (name, spinSvc)',
-        legendFormat='{{spinSvc}}-{{name}}',
+        'sum(resilience4j_circuitbreaker_state{state=~".*open"}) by (name, app_kubernetes_io_name)',
+        legendFormat='{{app_kubernetes_io_name}}-{{name}}',
       )
     )
   )
@@ -134,8 +134,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(resilience4j_circuitbreaker_failure_rate[$__rate_interval])) by (name, spinSvc)',
-        legendFormat='{{spinSvc}}-{{name}}',
+        'sum(rate(resilience4j_circuitbreaker_failure_rate[$__rate_interval])) by (name, app_kubernetes_io_name)',
+        legendFormat='{{app_kubernetes_io_name}}-{{name}}',
       )
     )
   )
@@ -147,8 +147,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(resilience4j_circuitbreaker_state{state="half_open"}) by (name, spinSvc)',
-        legendFormat='{{spinSvc}}-{{name}}',
+        'sum(resilience4j_circuitbreaker_state{state="half_open"}) by (name, app_kubernetes_io_name)',
+        legendFormat='{{app_kubernetes_io_name}}-{{name}}',
       )
     )
   )
