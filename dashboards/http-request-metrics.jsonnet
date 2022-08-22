@@ -82,7 +82,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (requestHost) (rate(okhttp_requests_seconds_sum{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))\n / \n sum by (requestHost) (rate(okhttp_requests_seconds_count{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
+      'sum by (requestHost) (rate(okhttp_requests_seconds_sum{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))\n / \n sum by (requestHost) (rate(okhttp_requests_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
       legendFormat='{{requestHost}}',
       interval='1m',
     )

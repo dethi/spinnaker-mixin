@@ -95,7 +95,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'max by (executionType) (\n  executions_active{container="orca"}\n)',
+        'max by (executionType) (\n  executions_active{spinSvc="orca"}\n)',
         legendFormat='{{ executionType }}'
       )
     )
@@ -110,7 +110,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (controller, status) (\n  rate(controller_invocations_seconds_sum{container="orca"}[$__rate_interval])\n) \n/\nsum by (controller, status) (\n  rate(controller_invocations_seconds_count{container="orca"}[$__rate_interval])\n)\n',
+        'sum by (controller, status) (\n  rate(controller_invocations_seconds_sum{spinSvc="orca"}[$__rate_interval])\n) \n/\nsum by (controller, status) (\n  rate(controller_invocations_seconds_count{spinSvc="orca"}[$__rate_interval])\n)\n',
         legendFormat='{{ controller }} :: {{ status }}',
       )
     )
@@ -124,7 +124,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (executionType) (\n  rate(task_invocations_duration_seconds_count{container="orca"}[$__rate_interval])\n)',
+        'sum by (executionType) (\n  rate(task_invocations_duration_seconds_count{spinSvc="orca"}[$__rate_interval])\n)',
         legendFormat='{{ executionType }}',
       ),
     )
@@ -138,7 +138,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (application, executionType) (\n  rate(\n    task_invocations_duration_seconds_count{container="orca", status="RUNNING"}[$__rate_interval])\n) ',
+        'sum by (application, executionType) (\n  rate(\n    task_invocations_duration_seconds_count{spinSvc="orca", status="RUNNING"}[$__rate_interval])\n) ',
         legendFormat='{{ application }} - {{ executionType }}',
       ),
     )
@@ -152,19 +152,19 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(\n  threadpool_activeCount{container="orca"}\n)',
+        'sum(\n  threadpool_activeCount{spinSvc="orca"}\n)',
         legendFormat='Active',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(\n  threadpool_blockingQueueSize{container="orca"}\n)',
+        'sum(\n  threadpool_blockingQueueSize{spinSvc="orca"}\n)',
         legendFormat='Blocking',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(\n  threadpool_poolSize{container="orca"}\n)',
+        'sum(\n  threadpool_poolSize{spinSvc="orca"}\n)',
         legendFormat='Size',
       )
     )
@@ -178,13 +178,13 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(\n  rate(queue_pushed_messages_total{container="orca"}[$__rate_interval])\n)',
+        'sum(\n  rate(queue_pushed_messages_total{spinSvc="orca"}[$__rate_interval])\n)',
         legendFormat='Pushed',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(\n  rate(queue_acknowledged_messages_total{container="orca"}[$__rate_interval])\n)',
+        'sum(\n  rate(queue_acknowledged_messages_total{spinSvc="orca"}[$__rate_interval])\n)',
         legendFormat="Ack'd",
       )
     )
@@ -224,19 +224,19 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_retried_messages_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_retried_messages_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
         legendFormat='Retried',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_dead_messages_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_dead_messages_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
         legendFormat='Dead',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_orphaned_messages{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_orphaned_messages{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
         legendFormat='Orphaned',
       )
     )

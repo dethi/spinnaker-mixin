@@ -30,8 +30,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(resilience4j_circuitbreaker_state{state="open"}) by (job, metricGroup, metricType)',
-        legendFormat='{{ job }}/{{metricGroup}}({{metricType}})',
+        'sum(resilience4j_circuitbreaker_state{state="open"}) by (app_kubernetes_io_name, metricGroup, metricType)',
+        legendFormat='{{ app_kubernetes_io_name }}/{{metricGroup}}({{metricType}})',
       )
     )
   )
@@ -42,8 +42,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(resilience4j_circuitbreaker_state{state="half_open"}) by (job, metricGroup, metricType)',
-        legendFormat='{{ job }} /{{metricType}}({{metricGroup}})',
+        'sum(resilience4j_circuitbreaker_state{state="half_open"}) by (app_kubernetes_io_name, metricGroup, metricType)',
+        legendFormat='{{ app_kubernetes_io_name }} /{{metricType}}({{metricGroup}})',
       )
     )
   )
@@ -54,49 +54,49 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="clouddriver",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="clouddriver",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Clouddriver/{{statusCode}}/{{controller}}',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="echo",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="echo",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Echo/{{statusCode}}/{{controller}}',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="fiat",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="fiat",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Fiat/{{statusCode}}/{{controller}}',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="front50",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="front50",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Front50/{{statusCode}}/{{controller}}',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="gate",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="gate",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Gate/{{statusCode}}/{{controller}}',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="igor",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="igor",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Igor/{{statusCode}}/{{controller}}',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="orca",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="orca",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Orca/{{statusCode}}/{{controller}}',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'label_replace(sum(rate(controller_invocations_total{container="rosco",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
+        'label_replace(sum(rate(controller_invocations_total{spinSvc="rosco",status="5xx"}[$__rate_interval])) by (controller, statusCode), "controller", "$1", "controller", "(.*)Controller")',
         legendFormat='Rosco/{{statusCode}}/{{controller}}',
       )
     )
