@@ -28,27 +28,27 @@ grafana.row.new(
   })
   .addTarget(
     grafana.prometheus.target(
-      'avg(rate(container_cpu_usage_seconds_total{container=~"$Component"}[$__rate_interval]))',
+      'avg(rate(container_cpu_usage_seconds_total{namespace="spinnaker", container=~"$Component"}[$__rate_interval]))',
       legendFormat='avg',
       interval='1m',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'max(rate(container_cpu_usage_seconds_total{container=~"$Component"}[$__rate_interval]))',
+      'max(rate(container_cpu_usage_seconds_total{namespace="spinnaker", container=~"$Component"}[$__rate_interval]))',
       legendFormat='max',
       interval='1m',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'avg(kube_pod_container_resource_limits_cpu_cores{container=~"$Component"})',
+      'avg(kube_pod_container_resource_limits_cpu_cores{namespace="spinnaker", container=~"$Component"})',
       legendFormat='Limit',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'avg(kube_pod_container_resource_requests_cpu_cores{container=~"$Component"})',
+      'avg(kube_pod_container_resource_requests_cpu_cores{namespace="spinnaker", container=~"$Component"})',
       legendFormat='Request',
     )
   )
@@ -64,7 +64,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'rate(container_cpu_cfs_throttled_periods_total{container=~"$Component"}[$__rate_interval])\n/\nrate(container_cpu_cfs_periods_total{container=~"$Component"}[$__rate_interval])',
+      'rate(container_cpu_cfs_throttled_periods_total{namespace="spinnaker", container=~"$Component"}[$__rate_interval])\n/\nrate(container_cpu_cfs_periods_total{namespace="spinnaker", container=~"$Component"}[$__rate_interval])',
       legendFormat='{{pod}}',
       interval='1m',
     )
@@ -95,19 +95,19 @@ grafana.row.new(
   })
   .addTarget(
     grafana.prometheus.target(
-      'avg(avg_over_time(container_memory_working_set_bytes{container=~"$Component"}[$__interval]))',
+      'avg(avg_over_time(container_memory_working_set_bytes{namespace="spinnaker", container=~"$Component"}[$__interval]))',
       legendFormat='avg',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'max(max_over_time(container_memory_working_set_bytes{container=~"$Component"}[$__interval]))',
+      'max(max_over_time(container_memory_working_set_bytes{namespace="spinnaker", container=~"$Component"}[$__interval]))',
       legendFormat='max',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'avg(kube_pod_container_resource_limits_memory_bytes{container=~"$Component"})',
+      'avg(kube_pod_container_resource_limits_memory_bytes{namespace="spinnaker", container=~"$Component"})',
       legendFormat='Limit',
     )
   )
