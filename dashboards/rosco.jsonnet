@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, instance)',
+    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -86,8 +86,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(bakesActive{instance=~"$Instance"}) by (instance)',
-        legendFormat='Active/{{instance}}',
+        'sum(bakesActive{kubernetes_pod_name=~"$Instance"}) by (kubernetes_pod_name)',
+        legendFormat='Active/{{kubernetes_pod_name}}',
       )
     )
   )
@@ -99,7 +99,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesRequested_total{instance=~"$Instance"}[$__rate_interval])) by (flavor)',
+        'sum(rate(bakesRequested_total{kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (flavor)',
         legendFormat='{{flavor}}',
       )
     )
@@ -112,7 +112,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesCompleted_seconds_count{instance=~"$Instance",success="false"}[$__rate_interval])) by (cause, region)',
+        'sum(rate(bakesCompleted_seconds_count{kubernetes_pod_name=~"$Instance",success="false"}[$__rate_interval])) by (cause, region)',
         legendFormat='{{cause}}/{{region}}',
       )
     )
@@ -125,7 +125,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesCompleted_seconds_count{instance=~"$Instance",success="true"}[$__rate_interval])) by (region)',
+        'sum(rate(bakesCompleted_seconds_count{kubernetes_pod_name=~"$Instance",success="true"}[$__rate_interval])) by (region)',
         legendFormat='/{{region}}',
       )
     )
@@ -140,7 +140,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesCompleted_seconds_sum{instance=~"$Instance",success="false"}[$__rate_interval])) by (cause,region)\n/\nsum(rate(bakesCompleted_seconds_count{instance=~"$Instance",success="false"}[$__rate_interval])) by (cause,region)',
+        'sum(rate(bakesCompleted_seconds_sum{kubernetes_pod_name=~"$Instance",success="false"}[$__rate_interval])) by (cause,region)\n/\nsum(rate(bakesCompleted_seconds_count{kubernetes_pod_name=~"$Instance",success="false"}[$__rate_interval])) by (cause,region)',
         legendFormat='{{cause}}/{{region}}',
       )
     )
@@ -155,7 +155,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(bakesCompleted_seconds_sum{instance=~"$Instance",success="true"}[$__rate_interval])) by (region)\n/\nsum(rate(bakesCompleted_seconds_count{instance=~"$Instance",success="true"}[$__rate_interval])) by (region)',
+        'sum(rate(bakesCompleted_seconds_sum{kubernetes_pod_name=~"$Instance",success="true"}[$__rate_interval])) by (region)\n/\nsum(rate(bakesCompleted_seconds_count{kubernetes_pod_name=~"$Instance",success="true"}[$__rate_interval])) by (region)',
         legendFormat='{{region}}',
       )
     )

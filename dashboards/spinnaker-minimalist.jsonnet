@@ -218,8 +218,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(executionTime_seconds_count[$__rate_interval])) by (instance)',
-        legendFormat='{{instance}}',
+        'sum(rate(executionTime_seconds_count[$__rate_interval])) by (kubernetes_pod_name)',
+        legendFormat='{{kubernetes_pod_name}}',
       )
     )
   )
@@ -231,8 +231,8 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(executionTime_seconds_sum[$__rate_interval])) by (instance) / sum(rate(executionTime_seconds_count[$__rate_interval])) by (instance)',
-        legendFormat='{{instance}}',
+        'sum(rate(executionTime_seconds_sum[$__rate_interval])) by (kubernetes_pod_name) / sum(rate(executionTime_seconds_count[$__rate_interval])) by (kubernetes_pod_name)',
+        legendFormat='{{kubernetes_pod_name}}',
       )
     )
   )

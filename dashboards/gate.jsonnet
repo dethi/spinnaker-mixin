@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, instance)',
+    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -92,7 +92,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(resilience4j_circuitbreaker_state{job=~"$job", state=~".*open", instance=~"$Instance"}) by (name)',
+        'sum(resilience4j_circuitbreaker_state{job=~"$job", state=~".*open", kubernetes_pod_name=~"$Instance"}) by (name)',
         legendFormat='{{name}}',
       )
     )
@@ -105,7 +105,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(resilience4j_circuitbreaker_failure_rate{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (name)',
+        'sum(rate(resilience4j_circuitbreaker_failure_rate{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (name)',
         legendFormat='{{ name }}',
       )
     )
@@ -118,7 +118,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(resilience4j_circuitbreaker_state{job=~"$job", state="half_open", instance=~"$Instance"}) by (name)',
+        'sum(resilience4j_circuitbreaker_state{job=~"$job", state="half_open", kubernetes_pod_name=~"$Instance"}) by (name)',
         legendFormat='{{name}}',
       )
     )
@@ -131,7 +131,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'rate(rateLimitThrottling_total{instance=~"$Instance"}[$__rate_interval])',
+        'rate(rateLimitThrottling_total{kubernetes_pod_name=~"$Instance"}[$__rate_interval])',
         legendFormat='',
       )
     )

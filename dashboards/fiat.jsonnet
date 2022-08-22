@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, instance)',
+    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,

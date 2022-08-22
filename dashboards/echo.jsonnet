@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, instance)',
+    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -86,7 +86,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(pipelines_triggered_total{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (application)',
+        'sum(rate(pipelines_triggered_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (application)',
         legendFormat='{{application}}',
       )
     )

@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, instance)',
+    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -190,25 +190,25 @@ grafana.dashboard.new(
   .addPanel(
     grafana.graphPanel.new(
       title='Queue Depth',
-      description='Keiko supports setting a delivery time for messages, so you’ll always see queued messages outpacing in-process messages if your Spinnaker install is active.\n\nThings like wait tasks, execution windows, retries, and so-on all schedule message delivery in the future, and in-process messages are usually in-process for a handful of milliseconds.\n\nOperating Orca, one of your life mission is to keep ready messages at 0. \n\nA ready message is a message that has a delivery time of now or in the past, but it hasn’t been picked up and transitioned into processing yet: \n\nThis is a key contributor to a complaint of, “Spinnaker is slow.” \n\nAs I’ve mentioned before, Orca is horizontally scalable. \n\nGive Orca an adrenaline shot of instances if you see ready messages over 0 for more than two intervals so you can clear the queue out.',
+      description='Keiko supports setting a delivery time for messages, so you’ll always see queued messages outpacing in-process messages if your Spinnaker install is active.\n\nThings like wait tasks, execution windows, retries, and so-on all schedule message delivery in the future, and in-process messages are usually in-process for a handful of milliseconds.\n\nOperating Orca, one of your life mission is to keep ready messages at 0. \n\nA ready message is a message that has a delivery time of now or in the past, but it hasn’t been picked up and transitioned into processing yet: \n\nThis is a key contributor to a complaint of, “Spinnaker is slow.” \n\nAs I’ve mentioned before, Orca is horizontally scalable. \n\nGive Orca an adrenaline shot of kubernetes_pod_names if you see ready messages over 0 for more than two intervals so you can clear the queue out.',
       datasource='$datasource',
       span=3,
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(\n  queue_depth{job=~"$job", instance=~"$Instance"}\n)',
+        'max(\n  queue_depth{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='queued',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(\n  queue_ready_depth{job=~"$job", instance=~"$Instance"}\n)',
+        'max(\n  queue_ready_depth{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='ready',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(\nqueue_unacked_depth{job=~"$job", instance=~"$Instance"}\n)',
+        'max(\nqueue_unacked_depth{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='unacked',
       )
     )
@@ -222,19 +222,19 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_retried_messages_total{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_retried_messages_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
         legendFormat='Retried',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_dead_messages_total{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_dead_messages_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
         legendFormat='Dead',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_orphaned_messages{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_orphaned_messages{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
         legendFormat='Orphaned',
       )
     )
@@ -249,13 +249,13 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(\n  queue_message_lag_seconds_sum{job=~"$job", instance=~"$Instance"}\n)\n/\nsum(\n  queue_message_lag_seconds_count{job=~"$job", instance=~"$Instance"}\n)',
+        'sum(\n  queue_message_lag_seconds_sum{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)\n/\nsum(\n  queue_message_lag_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='mean',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(queue_message_lag_seconds_max{job=~"$job", instance=~"$Instance"})',
+        'max(queue_message_lag_seconds_max{job=~"$job", kubernetes_pod_name=~"$Instance"})',
         legendFormat='max',
       )
     )
@@ -274,7 +274,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(stage_invocations_total{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (cloudProvider, type)',
+        'sum(rate(stage_invocations_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (cloudProvider, type)',
         legendFormat='{{type}}/{{cloudProvider}}',
       )
     )
@@ -287,7 +287,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(stage_invocations_duration_total{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (cloudProvider, stageType)',
+        'sum(rate(stage_invocations_duration_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (cloudProvider, stageType)',
         legendFormat='{{stageType}}/{{cloudProvider}}',
       )
     )
@@ -300,7 +300,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(stage_invocations_duration_total{job=~"$job", instance=~"$Instance", bucket!="lt5m"}[$__rate_interval])) by (stageType, cloudProvider, bucket)',
+        'sum(rate(stage_invocations_duration_total{job=~"$job", kubernetes_pod_name=~"$Instance", bucket!="lt5m"}[$__rate_interval])) by (stageType, cloudProvider, bucket)',
         legendFormat='{{bucket}}/{{cloudProvider}}/{{stageType}}',
       )
     )
@@ -313,7 +313,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(threadpool_blockingQueueSize{job=~"$job", instance=~"$Instance"}[$__rate_interval])) by (id)',
+        'sum(rate(threadpool_blockingQueueSize{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (id)',
         legendFormat='{{id}}',
       )
     )
@@ -326,7 +326,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (application) (queue_zombies_total{job=~"$job", instance=~"$Instance"})',
+        'sum by (application) (queue_zombies_total{job=~"$job", kubernetes_pod_name=~"$Instance"})',
         legendFormat='{{ application }}',
       )
     )
@@ -340,7 +340,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(threadpool_activeCount{job=~"$job", instance=~"$Instance"}) by (id)',
+        'sum(threadpool_activeCount{job=~"$job", kubernetes_pod_name=~"$Instance"}) by (id)',
         legendFormat='{{id}}',
       )
     )
@@ -353,7 +353,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(threadpool_poolSize{job=~"$job", instance=~"$Instance"}) by (id)',
+        'sum(threadpool_poolSize{job=~"$job", kubernetes_pod_name=~"$Instance"}) by (id)',
         legendFormat='{{id}}',
       )
     )

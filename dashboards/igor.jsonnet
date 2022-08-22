@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, instance)',
+    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -92,7 +92,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (name) (\n  max_over_time(resilience4j_circuitbreaker_state{job=~"$job", state=~".*open", instance=~"$Instance"}[$__rate_interval])\n)',
+        'sum by (name) (\n  max_over_time(resilience4j_circuitbreaker_state{job=~"$job", state=~".*open", kubernetes_pod_name=~"$Instance"}[$__rate_interval])\n)',
         legendFormat='{{name}}',
       )
     )
@@ -105,7 +105,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (name) (\n  rate(resilience4j_circuitbreaker_failure_rate{job="$job", instance=~"$Instance"}[$__rate_interval])\n)',
+        'sum by (name) (\n  rate(resilience4j_circuitbreaker_failure_rate{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])\n)',
         legendFormat='{{name}}',
       )
     )
@@ -119,7 +119,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (name) (\n  max_over_time(resilience4j_circuitbreaker_state{job="$job", state="half_open", instance=~"$Instance"}[$__rate_interval])\n)',
+        'sum by (name) (\n  max_over_time(resilience4j_circuitbreaker_state{job="$job", state="half_open", kubernetes_pod_name=~"$Instance"}[$__rate_interval])\n)',
         legendFormat='{{name}}',
       )
     )
@@ -133,7 +133,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (monitor) (\n  rate(pollingMonitor_pollTiming_seconds_count{job="$job", instance=~"$Instance"}[$__rate_interval])\n)',
+        'sum by (monitor) (\n  rate(pollingMonitor_pollTiming_seconds_count{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])\n)',
         legendFormat='{{monitor}}',
       )
     )
@@ -148,7 +148,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (monitor) (rate(pollingMonitor_pollTiming_seconds_sum{job="$job", instance=~"$Instance"}[$__rate_interval]))\n/\nsum by (monitor) (rate(pollingMonitor_pollTiming_seconds_count{job="$job", instance=~"$Instance"}[$__rate_interval]))',
+        'sum by (monitor) (rate(pollingMonitor_pollTiming_seconds_sum{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))\n/\nsum by (monitor) (rate(pollingMonitor_pollTiming_seconds_count{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
         legendFormat='{{monitor}}',
       )
     )
@@ -163,7 +163,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (monitor, partition) (\n  rate(pollingMonitor_failed_total{job="$job", instance=~"$Instance"}[$__rate_interval])\n)',
+        'sum by (monitor, partition) (\n  rate(pollingMonitor_failed_total{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])\n)',
         legendFormat='{{monitor}} / {{partition}}',
       )
     )
@@ -177,7 +177,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (account) (\n  rate(pollingMonitor_docker_retrieveImagesByAccount_seconds_count{job="$job", instance=~"$Instance"}[$__interval])\n)',
+        'sum by (account) (\n  rate(pollingMonitor_docker_retrieveImagesByAccount_seconds_count{job="$job", kubernetes_pod_name=~"$Instance"}[$__interval])\n)',
         legendFormat='{{account}}',
       )
     )
@@ -190,7 +190,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (monitor, partition) (\n  max_over_time(pollingMonitor_itemsOverThreshold{job="$job", instance=~"$Instance"}[$__interval])\n)',
+        'sum by (monitor, partition) (\n  max_over_time(pollingMonitor_itemsOverThreshold{job="$job", kubernetes_pod_name=~"$Instance"}[$__interval])\n)',
         legendFormat='{{ monitor }} / {{ partition }}',
       )
     )

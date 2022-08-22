@@ -6,7 +6,7 @@ grafana.row.new(
 .addPanel(
   grafana.graphPanel.new(
     title='CPU',
-    description='CPU Usage. Average is the average usage across all instances, max is the highest usage across all instances. As CPU Usage is a sampled metric it is best to view in relation to throttling percentage.',
+    description='CPU Usage. Average is the average usage across all kubernetes_pod_names, max is the highest usage across all kubernetes_pod_names. As CPU Usage is a sampled metric it is best to view in relation to throttling percentage.',
     datasource='$datasource',
     span=3,
     fill=0,
@@ -73,7 +73,7 @@ grafana.row.new(
 .addPanel(
   grafana.graphPanel.new(
     title='Memory',
-    description='Memory utilisation. Average is the average usage across all instaces, max is the highest usage across all instances.',
+    description='Memory utilisation. Average is the average usage across all instaces, max is the highest usage across all kubernetes_pod_names.',
     datasource='$datasource',
     span=3,
     fill=0,
