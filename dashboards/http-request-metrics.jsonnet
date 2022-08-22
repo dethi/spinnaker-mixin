@@ -12,7 +12,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (controller, method) (rate(controller_invocations_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
+      'sum by (controller, method) (rate(controller_invocations_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
       legendFormat='{{controller}}/{{method}}',
     )
   )
@@ -28,7 +28,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (controller, method) (rate(controller_invocations_seconds_sum{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))\n / \n sum by (controller, method) (rate(controller_invocations_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
+      'sum by (controller, method) (rate(controller_invocations_seconds_sum{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))\n / \n sum by (controller, method) (rate(controller_invocations_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
       legendFormat='{{controller}}/{{method}}',
     )
   )
@@ -43,13 +43,13 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (statusCode, cause, controller, method) (rate(controller_invocations_total{job=~"$job", kubernetes_pod_name=~"$Instance", status="5xx"}[$__rate_interval]))',
+      'sum by (statusCode, cause, controller, method) (rate(controller_invocations_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance", status="5xx"}[$__rate_interval]))',
       legendFormat='{{statusCode}}/{{cause}}/{{controller}}/{{method}}',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (statusCode, cause, controller, method) (rate(controller_invocations_total{job=~"$job", kubernetes_pod_name=~"$Instance", statusCode="429"}[$__rate_interval]))',
+      'sum by (statusCode, cause, controller, method) (rate(controller_invocations_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance", statusCode="429"}[$__rate_interval]))',
       legendFormat='{{statusCode}}/{{cause}}/{{controller}}/{{method}}',
     )
   )
@@ -65,7 +65,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (requestHost) (rate(okhttp_requests_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
+      'sum by (requestHost) (rate(okhttp_requests_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
       legendFormat='{{requestHost}}',
       interval='1m',
     )
@@ -82,7 +82,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (requestHost) (rate(okhttp_requests_seconds_sum{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))\n / \n sum by (requestHost) (rate(okhttp_requests_seconds_count{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
+      'sum by (requestHost) (rate(okhttp_requests_seconds_sum{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))\n / \n sum by (requestHost) (rate(okhttp_requests_seconds_count{job="$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval]))',
       legendFormat='{{requestHost}}',
       interval='1m',
     )
@@ -98,14 +98,14 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (requestHost, statusCode) (rate(okhttp_requests_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance", status=~"(5xx|Unknown)"}[$__rate_interval]))',
+      'sum by (requestHost, statusCode) (rate(okhttp_requests_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance", status=~"(5xx|Unknown)"}[$__rate_interval]))',
       legendFormat='{{statusCode}}/{{status}}/{{requestHost}}',
       interval='1m',
     )
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (requestHost, statusCode) (rate(okhttp_requests_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance", statusCode="429"}[$__rate_interval]))',
+      'sum by (requestHost, statusCode) (rate(okhttp_requests_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance", statusCode="429"}[$__rate_interval]))',
       legendFormat='{{statusCode}}/{{requestHost}}',
       interval='1m',
     )

@@ -45,9 +45,9 @@ grafana.dashboard.new(
 )
 .addTemplate(
   grafana.template.new(
-    name='job',
+    name='Component',
     datasource='$datasource',
-    query='label_values(up{job=~".*$spinSvc.*"}, job)',
+    query='label_values(up{app_kubernetes_io_name=~".*$spinSvc.*"}, app_kubernetes_io_name)',
     current='All',
     refresh=1,
     includeAll=true,
@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
+    query='label_values(up{app_kubernetes_io_name=~"$Component"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -196,19 +196,19 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(\n  queue_depth{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
+        'max(\n  queue_depth{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='queued',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(\n  queue_ready_depth{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
+        'max(\n  queue_ready_depth{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='ready',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(\nqueue_unacked_depth{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
+        'max(\nqueue_unacked_depth{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='unacked',
       )
     )
@@ -222,19 +222,19 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_retried_messages_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_retried_messages_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
         legendFormat='Retried',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_dead_messages_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_dead_messages_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
         legendFormat='Dead',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(queue_orphaned_messages{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
+        'sum(rate(queue_orphaned_messages{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (job)',
         legendFormat='Orphaned',
       )
     )
@@ -249,13 +249,13 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(\n  queue_message_lag_seconds_sum{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)\n/\nsum(\n  queue_message_lag_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance"}\n)',
+        'sum(\n  queue_message_lag_seconds_sum{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}\n)\n/\nsum(\n  queue_message_lag_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}\n)',
         legendFormat='mean',
       )
     )
     .addTarget(
       grafana.prometheus.target(
-        'max(queue_message_lag_seconds_max{job=~"$job", kubernetes_pod_name=~"$Instance"})',
+        'max(queue_message_lag_seconds_max{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"})',
         legendFormat='max',
       )
     )
@@ -274,7 +274,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(stage_invocations_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (cloudProvider, type)',
+        'sum(rate(stage_invocations_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (cloudProvider, type)',
         legendFormat='{{type}}/{{cloudProvider}}',
       )
     )
@@ -287,7 +287,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(stage_invocations_duration_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (cloudProvider, stageType)',
+        'sum(rate(stage_invocations_duration_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (cloudProvider, stageType)',
         legendFormat='{{stageType}}/{{cloudProvider}}',
       )
     )
@@ -300,7 +300,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(stage_invocations_duration_total{job=~"$job", kubernetes_pod_name=~"$Instance", bucket!="lt5m"}[$__rate_interval])) by (stageType, cloudProvider, bucket)',
+        'sum(rate(stage_invocations_duration_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance", bucket!="lt5m"}[$__rate_interval])) by (stageType, cloudProvider, bucket)',
         legendFormat='{{bucket}}/{{cloudProvider}}/{{stageType}}',
       )
     )
@@ -313,7 +313,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(threadpool_blockingQueueSize{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (id)',
+        'sum(rate(threadpool_blockingQueueSize{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (id)',
         legendFormat='{{id}}',
       )
     )
@@ -326,7 +326,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (application) (queue_zombies_total{job=~"$job", kubernetes_pod_name=~"$Instance"})',
+        'sum by (application) (queue_zombies_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"})',
         legendFormat='{{ application }}',
       )
     )
@@ -340,7 +340,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(threadpool_activeCount{job=~"$job", kubernetes_pod_name=~"$Instance"}) by (id)',
+        'sum(threadpool_activeCount{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}) by (id)',
         legendFormat='{{id}}',
       )
     )
@@ -353,7 +353,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(threadpool_poolSize{job=~"$job", kubernetes_pod_name=~"$Instance"}) by (id)',
+        'sum(threadpool_poolSize{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}) by (id)',
         legendFormat='{{id}}',
       )
     )

@@ -45,9 +45,9 @@ grafana.dashboard.new(
 )
 .addTemplate(
   grafana.template.new(
-    name='job',
+    name='Component',
     datasource='$datasource',
-    query='label_values(up{job=~".*$spinSvc.*"}, job)',
+    query='label_values(up{app_kubernetes_io_name=~".*$spinSvc.*"}, app_kubernetes_io_name)',
     current='All',
     refresh=1,
     includeAll=true,
@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
+    query='label_values(up{app_kubernetes_io_name=~"$Component"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,

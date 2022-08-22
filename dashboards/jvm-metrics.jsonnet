@@ -13,7 +13,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum(jvm_memory_used_bytes{job=~"$job", kubernetes_pod_name=~"$Instance", area="heap"}) by (id)',
+      'sum(jvm_memory_used_bytes{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance", area="heap"}) by (id)',
       legendFormat='{{id}}',
     )
   )
@@ -28,7 +28,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'sum by (kubernetes_pod_name) (jvm_gc_pause_seconds_sum{job=~"$job", kubernetes_pod_name=~"$Instance"}) \n / \n sum by (kubernetes_pod_name) (jvm_gc_pause_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance"})',
+      'sum by (kubernetes_pod_name) (jvm_gc_pause_seconds_sum{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}) \n / \n sum by (kubernetes_pod_name) (jvm_gc_pause_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"})',
       legendFormat='{{kubernetes_pod_name}}',
     )
   )
@@ -43,7 +43,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'max by (kubernetes_pod_name) (jvm_gc_pause_seconds_max{job=~"$job", kubernetes_pod_name=~"$Instance"})',
+      'max by (kubernetes_pod_name) (jvm_gc_pause_seconds_max{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"})',
       legendFormat='{{kubernetes_pod_name}}',
     )
   )
@@ -58,7 +58,7 @@ grafana.row.new(
   )
   .addTarget(
     grafana.prometheus.target(
-      'max_over_time(jvm_threads_live_threads{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])',
+      'max_over_time(jvm_threads_live_threads{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])',
       legendFormat='{{kubernetes_pod_name}}',
       interval='1m',
     )

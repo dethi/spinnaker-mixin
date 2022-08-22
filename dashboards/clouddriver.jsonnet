@@ -45,9 +45,9 @@ grafana.dashboard.new(
 )
 .addTemplate(
   grafana.template.new(
-    name='job',
+    name='Component',
     datasource='$datasource',
-    query='label_values(up{job=~".*$spinSvc.*"}, job)',
+    query='label_values(up{app_kubernetes_io_name=~".*$spinSvc.*"}, app_kubernetes_io_name)',
     current='All',
     refresh=1,
     includeAll=true,
@@ -57,7 +57,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Instance',
     datasource='$datasource',
-    query='label_values(up{job=~"$job"}, kubernetes_pod_name)',
+    query='label_values(up{app_kubernetes_io_name=~"$Component"}, kubernetes_pod_name)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -70,7 +70,7 @@ grafana.dashboard.new(
   grafana.template.new(
     name='Account',
     datasource='$datasource',
-    query='label_values(controller_invocations_total{job=~"$job"}, account)',
+    query='label_values(controller_invocations_total{app_kubernetes_io_name=~"$Component"}, account)',
     allValues='.*',
     current='All',
     refresh=1,
@@ -113,7 +113,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(controller_invocations_total{job=~"$job",kubernetes_pod_name=~"$Instance",status="5xx",account=~"$Account"}[$__rate_interval])) by (controller, method, statusCode)',
+        'sum(rate(controller_invocations_total{app_kubernetes_io_name=~"$Component",kubernetes_pod_name=~"$Instance",status="5xx",account=~"$Account"}[$__rate_interval])) by (controller, method, statusCode)',
         legendFormat='{{statusCode}}/{{controller}}/{{method}}'
       )
     )
@@ -145,7 +145,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(controller_invocations_total{job=~"$job", kubernetes_pod_name=~"$Instance",account=~"$Account"}[$__rate_interval])) by (controller, method)',
+        'sum(rate(controller_invocations_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance",account=~"$Account"}[$__rate_interval])) by (controller, method)',
         legendFormat='{{controller}}/{{method}}',
       )
     )
@@ -172,7 +172,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(controller_invocations_seconds_sum{job=~"$job", kubernetes_pod_name=~"$Instance",account=~"$Account"}[$__rate_interval])) by (controller, method) \n/\nsum(rate(controller_invocations_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance",account=~"$Account"}[$__rate_interval])) by (controller, method)',
+        'sum(rate(controller_invocations_seconds_sum{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance",account=~"$Account"}[$__rate_interval])) by (controller, method) \n/\nsum(rate(controller_invocations_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance",account=~"$Account"}[$__rate_interval])) by (controller, method)',
         legendFormat='{{controller}}/{{method}}',
       )
     )
@@ -185,7 +185,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(tasks_total{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
+        'sum(rate(tasks_total{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
         legendFormat='{{kubernetes_pod_name}}',
       )
     )
@@ -198,7 +198,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(operations_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (OperationType)',
+        'sum(rate(operations_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (OperationType)',
         legendFormat='{{OperationType}}',
       )
     )
@@ -211,7 +211,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(executionTime_seconds_count{job=~"$job", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
+        'sum(rate(executionTime_seconds_count{app_kubernetes_io_name=~"$Component", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
         legendFormat='{{kubernetes_pod_name}}',
       )
     )
@@ -224,7 +224,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(operations_seconds_sum{job=~"$job",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (OperationType)\n/\nsum(rate(operations_seconds_count{job=~"$job",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (OperationType)',
+        'sum(rate(operations_seconds_sum{app_kubernetes_io_name=~"$Component",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (OperationType)\n/\nsum(rate(operations_seconds_count{app_kubernetes_io_name=~"$Component",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (OperationType)',
         legendFormat='{{OperationType}}',
       )
     )
@@ -238,7 +238,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(executionTime_seconds_sum{job=~"$job",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)\n/\nsum(rate(executionTime_seconds_count{job=~"$job",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
+        'sum(rate(executionTime_seconds_sum{app_kubernetes_io_name=~"$Component",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)\n/\nsum(rate(executionTime_seconds_count{app_kubernetes_io_name=~"$Component",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (kubernetes_pod_name)',
         legendFormat='{{kubernetes_pod_name}}',
       )
     )
@@ -251,7 +251,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(onDemand_read_seconds_count{job=~"$job",providerName=~".*$Platform.*", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (onDemandType)',
+        'sum(rate(onDemand_read_seconds_count{app_kubernetes_io_name=~"$Component",providerName=~".*$Platform.*", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (onDemandType)',
         legendFormat='{{onDemandType}}',
       )
     )
@@ -264,7 +264,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (provider, account) (\n# provider\nlabel_replace(\n# account\nlabel_replace(\n# query\n(sum(rate(executionTime_seconds_count{job=~"$job", agent=~".*$Platform.*",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (agent)\n),\n"account", "$1", "agent", "^[A-Za-z]+/([A-Za-z0-9-]+).*"\n), \n"provider", "$1", "agent", "^([A-Za-z]+).*"\n)\n)',
+        'sum by (provider, account) (\n# provider\nlabel_replace(\n# account\nlabel_replace(\n# query\n(sum(rate(executionTime_seconds_count{app_kubernetes_io_name=~"$Component", agent=~".*$Platform.*",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (agent)\n),\n"account", "$1", "agent", "^[A-Za-z]+/([A-Za-z0-9-]+).*"\n), \n"provider", "$1", "agent", "^([A-Za-z]+).*"\n)\n)',
         legendFormat='{{ provider }} :: {{ account }}',
       )
     )
@@ -278,7 +278,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum(rate(onDemand_read_seconds_sum{job=~"$job",providerName=~".*$Platform.*", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (onDemandType)\n/\nsum(rate(onDemand_read_seconds_count{job=~"$job",providerName=~".*$Platform.*", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (onDemandType)',
+        'sum(rate(onDemand_read_seconds_sum{app_kubernetes_io_name=~"$Component",providerName=~".*$Platform.*", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (onDemandType)\n/\nsum(rate(onDemand_read_seconds_count{app_kubernetes_io_name=~"$Component",providerName=~".*$Platform.*", kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (onDemandType)',
         legendFormat='{{onDemandType}}',
       )
     )
@@ -298,7 +298,7 @@ grafana.dashboard.new(
     )
     .addTarget(
       grafana.prometheus.target(
-        'sum by (provider, account) (\n# provider\nlabel_replace(\n# account\nlabel_replace(\n# query\n(sum(rate(executionTime_seconds_sum{job=~"$job", agent=~".*$Platform.*",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (agent)\n),\n"account", "$1", "agent", "^[A-Za-z]+/([A-Za-z0-9-]+).*"\n), \n"provider", "$1", "agent", "^([A-Za-z]+).*"\n)\n)\n\n/\n\nsum by (provider, account) (\n# provider\nlabel_replace(\n# account\nlabel_replace(\n# query\n(sum(rate(executionTime_seconds_count{job=~"$job", agent=~".*$Platform.*",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (agent)\n),\n"account", "$1", "agent", "^[A-Za-z]+/([A-Za-z0-9-]+).*"\n), \n"provider", "$1", "agent", "^([A-Za-z]+).*"\n)\n)',
+        'sum by (provider, account) (\n# provider\nlabel_replace(\n# account\nlabel_replace(\n# query\n(sum(rate(executionTime_seconds_sum{app_kubernetes_io_name=~"$Component", agent=~".*$Platform.*",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (agent)\n),\n"account", "$1", "agent", "^[A-Za-z]+/([A-Za-z0-9-]+).*"\n), \n"provider", "$1", "agent", "^([A-Za-z]+).*"\n)\n)\n\n/\n\nsum by (provider, account) (\n# provider\nlabel_replace(\n# account\nlabel_replace(\n# query\n(sum(rate(executionTime_seconds_count{app_kubernetes_io_name=~"$Component", agent=~".*$Platform.*",kubernetes_pod_name=~"$Instance"}[$__rate_interval])) by (agent)\n),\n"account", "$1", "agent", "^[A-Za-z]+/([A-Za-z0-9-]+).*"\n), \n"provider", "$1", "agent", "^([A-Za-z]+).*"\n)\n)',
         legendFormat='{{ provider }} :: {{ account }}',
       )
     )
